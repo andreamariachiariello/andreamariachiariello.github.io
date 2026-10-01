@@ -1,0 +1,15 @@
+- title: Polymer physics predicts the effects of structural variants on chromatin architecture
+  theme: genome
+  url: https://doi.org/10.1038/s41588-018-0098-8
+  meta: Nature Genetics 50, 662–667 (2018)
+  question: Can a physical model anticipate changes in genome folding after a structural variant?
+- title: Multiscale modelling of chromatin 4D organization in SARS-CoV-2 infected cells
+  theme: disease
+  url: https://doi.org/10.1038/s41467-024-48370-6
+  meta: Nature Communications 15, 4014 (2024)
+  question: How does SARS-CoV-2 infection affect chromosome organization?
+- title: West Nile virus outbreak in Italy modelled with the quantum Game of Life
+  theme: epidemics
+  url: https://arxiv.org/abs/2606.20489
+  meta: arXiv:2606.20489 (preprint) (2026)
+  question: Can cellular automata describe observed epidemic waves?

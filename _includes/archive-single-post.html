@@ -1,0 +1,24 @@
+{% include base_path %}
+
+{% if post.id %}
+  {% assign title = post.title | markdownify | remove: "<p>" | remove: "</p>" %}
+{% else %}
+  {% assign title = post.title %}
+{% endif %}
+
+<div class="card">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    <h2 class="card__title" itemprop="headline">
+      <a href="{{ base_path }}{{ post.url }}" rel="permalink">{{ title }}</a>
+    </h2>
+
+    <p class="post-meta">
+      {% if post.date %}<time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%B %d, %Y" }}</time>{% endif %}
+      {% if post.read_time %}<span class="sep">·</span>{% include read-time.html %}{% endif %}
+    </p>
+
+    {% if post.excerpt %}
+    <div class="card__text" itemprop="description">{{ post.excerpt | markdownify }}</div>
+    {% endif %}
+  </article>
+</div>

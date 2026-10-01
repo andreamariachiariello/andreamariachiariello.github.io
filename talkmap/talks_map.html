@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Selected talks</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>html,body,#map{height:100%;margin:0;font-family:Arial,sans-serif}
+.note{position:absolute;bottom:24px;left:10px;z-index:800;padding:5px 8px;background:white;color:#333;font-size:11px;border-radius:4px}
+[data-theme="dark"] .leaflet-tile-pane{filter:brightness(.7)}
+[data-theme="dark"] .leaflet-popup-content-wrapper,[data-theme="dark"] .leaflet-popup-tip{background:#25292d;color:#eee}
+</style></head><body>
+<div id="map" aria-label="Map of selected research talks"></div><div class="note">Selected talks · approximate city locations</div>
+<script src="/assets/js/embed-theme.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+const entries = [{"coordinates": [40.823, 14.122], "text": "<strong>Physical principles of genome re-structuring in healthy and pathogenic genomes<\/strong><br>2026-06-16<br>TIGEM — Auditorium Angelo Maramai<br>Pozzuoli, Italy<br><a target=\"_blank\" rel=\"noopener\" href=\"https://www.tigem.it/newsroom/seminars/andrea-maria-chiariello-phd-physical-principles-of-genome-re-structuring-in-healthy-and-pathogenic-genomes\">Event page<\/a>"}];
+const map = L.map('map').setView([41, 13], 5);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',maxZoom:18
+}).addTo(map);
+entries.forEach(e=>L.circleMarker(e.coordinates,{radius:8,color:'#1f3f7a',fillColor:'#6f92d0',fillOpacity:.9}).addTo(map).bindPopup(e.text));
+if(entries.length===1) map.setView(entries[0].coordinates,6);
+if(entries.length>1) map.fitBounds(entries.map(e=>e.coordinates),{padding:[30,30],maxZoom:7});
+</script></body></html>

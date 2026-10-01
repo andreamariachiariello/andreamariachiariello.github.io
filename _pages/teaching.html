@@ -1,0 +1,30 @@
+---
+layout: archive
+title: "Teaching"
+permalink: /teaching/
+author_profile: true
+---
+
+{% include base_path %}
+
+<p>For information about current teaching activities, please <a href="mailto:{{ site.author.email }}">contact me</a>.</p>
+
+{% assign courses = site.teaching | where_exp: "post", "post.category != 'presentation'" %}
+{% assign presentations = site.teaching | where_exp: "post", "post.category == 'presentation'" %}
+
+{% if presentations.size > 0 %}
+{% include section-head.html title="Presentations" target="presentations" collapsible=false %}
+<div id="presentations" class="section-body prose">
+<p style="margin-bottom: 1.5em;">Online slides from selected lectures I have given at schools and courses.</p>
+{% for post in presentations reversed %}
+  {% include archive-single-teaching.html %}
+{% endfor %}
+</div>
+{% endif %}
+
+{% include section-head.html title="Courses" target="courses" collapsible=false %}
+<div id="courses" class="section-body">
+{% for post in courses reversed %}
+  {% include archive-single-teaching.html %}
+{% endfor %}
+</div>

@@ -1,0 +1,19 @@
+---
+layout: archive
+title: "Talks, presentations and posters"
+permalink: /talks/
+author_profile: true
+---
+
+<p>A selection of research presentations. The map currently shows one documented seminar, at TIGEM. Locations are approximate city coordinates.</p>
+
+<iframe class="embed embed--map" src="/talkmap/talks_map.html" title="Map of talks and contributions"></iframe>
+
+{% assign talks = site.talks | sort: "date" | reverse %}
+{% assign by_year = talks | group_by_exp: "t", "t.date | date: '%Y'" %}
+{% for year in by_year %}
+<h2>{{ year.name }}</h2>
+{% for post in year.items %}
+  {% include archive-single-talk.html %}
+{% endfor %}
+{% endfor %}

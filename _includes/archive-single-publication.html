@@ -1,0 +1,42 @@
+{% include base_path %}
+
+{% if post.id %}
+  {% assign title = post.title | markdownify | remove: "<p>" | remove: "</p>" %}
+{% else %}
+  {% assign title = post.title %}
+{% endif %}
+
+{% assign is_preprint = false %}
+{% if post.paperurl == nil or post.paperurl == "" %}{% assign is_preprint = true %}{% endif %}
+
+<div class="card {% if is_preprint %}card--preprint{% else %}card--journal{% endif %}"{% if post.theme %} data-theme="{% if post.theme.first %}{{ post.theme | join: " " }}{% else %}{{ post.theme }}{% endif %}"{% endif %}>
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    <h2 class="card__title" itemprop="headline">
+      {% if is_preprint %}
+        <a href="{{ post.preprinturl }}" target="_blank" rel="noopener">{{ title }}</a>
+      {% else %}
+        <a href="{{ post.paperurl }}" target="_blank" rel="noopener">{{ title }}</a>
+      {% endif %}
+    </h2>
+
+    <p class="card__meta">
+      {% if is_preprint %}<span class="chip chip--preprint">{{ post.venue_short | default: "Preprint" }}</span>{% else %}<span class="chip chip--journal">{{ post.venue_short | default: "Journal" }}</span>{% endif %}
+      <span class="sep">·</span>{{ post.date | date: '%B %Y' }}
+      {% if post.venue %}<span class="sep">·</span><i>{{ post.venue }}</i>{% endif %}
+    </p>
+
+    <p class="card__authors" itemprop="author">
+      {% assign authors = post.authors | split: ', ' %}
+      {% for author in authors %}{% if author contains site.author.name %}<span class="me">{{ author }}</span>{% else %}{{ author }}{% endif %}{% unless forloop.last %}, {% endunless %}{% endfor %}
+    </p>
+
+    <div class="card__actions">
+      {% if post.paperurl and post.paperurl != "" %}
+        <a class="action" href="{{ post.paperurl }}" target="_blank" rel="noopener">Journal<i class="fas fa-external-link-alt"></i></a>
+      {% endif %}
+      {% if post.preprinturl and post.preprinturl != "" %}
+        <a class="action" href="{{ post.preprinturl }}" target="_blank" rel="noopener">{% if post.preprinturl contains "arxiv" %}arXiv{% elsif post.preprinturl contains "biorxiv" %}bioRxiv{% else %}Preprint{% endif %}<i class="fas fa-external-link-alt"></i></a>
+      {% endif %}
+    </div>
+  </article>
+</div>

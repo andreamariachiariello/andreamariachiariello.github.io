@@ -1,0 +1,18 @@
+{% include base_path %}
+
+{% if post.id %}
+  {% assign title = post.title | markdownify | remove: "<p>" | remove: "</p>" %}
+{% else %}
+  {% assign title = post.title %}
+{% endif %}
+
+<li>
+  {% if post.link %}
+    <a class="cv-item__title" href="{{ post.link }}">{{ title }}</a>
+  {% else %}
+    <a class="cv-item__title" href="{{ base_path }}{{ post.url }}" rel="permalink">{{ title }}</a>
+  {% endif %}<br>
+  <span class="cv-item__sub">
+    {{ post.type }}{% if post.venue %} at {{ post.venue }}{% endif %}{% if post.location %}, {{ post.location }}{% endif %}{% if post.date %}, {{ post.date | date: '%B %Y' }}{% endif %}
+  </span>
+</li>

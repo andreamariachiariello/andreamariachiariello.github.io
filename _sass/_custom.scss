@@ -1,0 +1,981 @@
+/* ==========================================================================
+   Site-specific styles (cards, chips, highlights, CV, embeds)
+   --------------------------------------------------------------------------
+   Every colour used by page content lives in the custom properties below so
+   that a dark theme only has to redefine :root.
+   ========================================================================== */
+
+:root {
+  /* text tones */
+  --accent:            #9e1910;
+  --accent-hover:      #7a130c;
+  --accent-soft:       rgba(158, 25, 16, 0.45);
+  --preprint:          #2f6b9a;   /* text-safe blue for preprints */
+  --invited:           #a23336;
+  --contributed:       #065b92;
+  --school:            #6c7e1e;   /* the map's darkgreen pin */
+  --visit:             #543666;   /* the map's darkpurple pin */
+  --coauthor:          #b9bec4;
+  /* fills (chips, buttons): stay the same in both themes, always with white text */
+  --accent-fill:       #9e1910;
+  --preprint-fill:     #2f6b9a;
+  --invited-fill:      #a23336;
+  --contributed-fill:  #065b92;
+  --preprint-node:     #5b9bd1;   /* node colour in the network */
+
+  --text:              #494e52;
+  --muted:             #6b7178;
+  --muted-2:           #9ba1a6;
+
+  --bg:                #ffffff;
+  --bg-elev:           #f3f4f5;
+  --code-bg:           #fafafa;
+  --card-bg:           #ffffff;
+  --card-bg-hover:     #f8f9fa;
+  --card-border:       #e6e8eb;
+  --card-border-hover: #d3d7db;
+  --card-shadow:       rgba(0, 0, 0, 0.04);
+  --rule:              #e3e5e8;
+  --thumb-bg:          #ffffff;
+}
+
+[data-theme="dark"] {
+  --accent:            #cf5145;
+  --accent-hover:      #de6c61;
+  --accent-soft:       rgba(207, 81, 69, 0.55);
+  --preprint:          #4f8fc7;
+  --invited:           #cf5145;
+  --contributed:       #4f8fc7;
+  --school:            #a4ba4a;
+  --visit:             #a184c4;
+  --coauthor:          #6f757c;
+  --accent-fill:       #9e1910;
+  --preprint-fill:     #2f6b9a;
+  --invited-fill:      #a23336;
+  --contributed-fill:  #065b92;
+  --accent-tint:       rgba(207, 81, 69, 0.18);
+  --preprint-tint:     rgba(79, 143, 199, 0.18);
+
+  --text:              #d7dade;
+  --muted:             #a3a9b0;
+  --muted-2:           #737980;
+
+  --bg:                #141618;
+  --bg-elev:           #1b1e21;
+  --code-bg:           #1b1e21;
+  --card-bg:           #191c1f;
+  --card-bg-hover:     #22262a;
+  --card-border:       #2a2e33;
+  --card-border-hover: #3b4046;
+  --card-shadow:       rgba(0, 0, 0, 0.35);
+  --rule:              #2a2e33;
+  --thumb-bg:          #ffffff;
+}
+
+/* ---------- theme-wide overrides of the base theme's hard-coded colours --- */
+
+body { background: var(--bg); color: var(--text); }
+h1, h2, h3, h4, h5, h6 { color: var(--text); }
+
+.masthead { background: var(--bg); border-bottom-color: var(--rule); }
+.masthead__inner-wrap { position: relative; }
+.greedy-nav {
+  background: var(--bg);
+  a { color: var(--accent); margin: 0 0.8rem; &:hover { color: var(--accent-hover); } }
+  .visible-links { margin: 0 auto; }
+  .visible-links a:before { background: var(--accent); }
+  /* the theme made the first item bold because it used to be the site name */
+  .visible-links li:first-child { font-weight: inherit; }
+  /* the theme fills the menu button with the brand colour: too loud for a
+     bar that carries nothing else */
+  > button {
+    background-color: transparent;
+    border: 1px solid var(--card-border);
+    border-radius: 6px;
+    padding: 0 0.55rem;
+
+    .navicon,
+    .navicon:before,
+    .navicon:after { background: var(--accent); }
+
+    /* open: the middle bar has to disappear or the X reads as a star */
+    &.close .navicon { background: transparent; }
+
+    &:hover { border-color: var(--accent); background: var(--card-bg-hover); }
+  }
+  .hidden-links {
+    background: var(--bg-elev);
+    border-color: var(--rule);
+    &:before { border-color: var(--rule) transparent; }
+    &:after  { border-color: var(--bg-elev) transparent; }
+    a:hover { color: var(--accent-hover); background: var(--card-bg-hover); }
+  }
+}
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 1px solid var(--card-border);
+  border-radius: 50%;
+  background: var(--card-bg);
+  color: var(--muted);
+  cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease;
+
+  svg { width: 15px; height: 15px; fill: currentColor; }
+  &:hover { color: var(--accent); border-color: var(--accent); }
+  .theme-toggle__moon { display: none; }
+}
+[data-theme="dark"] .theme-toggle .theme-toggle__sun  { display: none; }
+[data-theme="dark"] .theme-toggle .theme-toggle__moon { display: block; }
+
+/* the switch is the last item of the nav, so the greedy navigation folds it
+   into the hamburger menu by itself when the bar runs out of room */
+/* the theme lays out every button inside the nav as the hamburger, so the
+   switch has to opt out of that */
+.greedy-nav .theme-toggle {
+  position: static;
+  right: auto;
+  top: auto;
+  transform: none;
+  background: var(--card-bg);
+  color: var(--muted);
+  border: 1px solid var(--card-border);
+  &:hover { color: var(--accent); border-color: var(--accent); background: var(--card-bg-hover); }
+}
+.greedy-nav .visible-links .theme-toggle { height: 30px; }
+.greedy-nav .visible-links .theme-toggle-item { vertical-align: middle; padding-left: 0.6rem; }
+.greedy-nav .visible-links .theme-toggle__label { display: none; }
+
+.greedy-nav .hidden-links .theme-toggle {
+  position: static;
+  transform: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  height: auto;
+  margin: 0;
+  padding: 10px 20px;
+  border: 0;
+  border-top: 1px solid var(--rule);
+  border-radius: 0;
+  background: transparent;
+  font: inherit;
+  color: var(--muted);
+  text-align: left;
+  cursor: pointer;
+  svg { width: 14px; height: 14px; }
+  &:hover { color: var(--accent-hover); background: var(--card-bg-hover); }
+}
+
+@media (max-width: 1023px) {
+
+  /* whichever links happen to fit look arbitrary when centred, so on a phone
+     the bar reads from the left */
+  .greedy-nav .visible-links { margin: 0; }
+
+  /* the name lives in the profile block below, so the bar stays slim */
+  .masthead__inner-wrap { padding: 0.35em 1em; }
+  .greedy-nav { min-width: 0; min-height: 38px; }
+  .greedy-nav button { height: 38px; top: 50%; transform: translateY(-50%); }
+}
+
+.author__name { color: var(--text); }
+.author__location { display: none; margin: 4px 0 0; font-size: 0.85em; color: var(--muted); }
+/* the theme paints every .fa in the profile list black; the location pin is
+   the one icon still using that class, so it vanished on the dark background */
+.social-icons .fa,
+.author__location .fa { color: inherit; }
+.author__bio, .author__urls, .author__urls a { color: var(--muted); }
+.author__urls a:hover { color: var(--accent); }
+.author__avatar img { border-color: var(--rule); }
+.wos-icon-wrap { display: inline-block; width: 13px; vertical-align: -1px; }
+.wos-icon { display: block; width: 100%; height: auto; }
+[data-theme="dark"] .wos-icon { filter: invert(1) brightness(0.8); }
+
+.page__footer {
+  background: var(--bg-elev);
+  border-top: 1px solid var(--rule);
+  color: var(--muted);
+  footer, a { color: var(--muted); }
+  a:hover { color: var(--accent); }
+}
+
+.page__meta, .page__date, .archive__subtitle, .page__content .page__meta { color: var(--muted); }
+hr { border-top-color: var(--rule); }
+blockquote { color: var(--muted); border-left-color: var(--accent); }
+
+pre, code, .highlight, .highlight pre {
+  background: var(--code-bg);
+  border-color: var(--rule);
+  color: var(--text);
+}
+
+table {
+  th { background: var(--bg-elev); border-bottom-color: var(--rule); color: var(--text); }
+  td { border-color: var(--rule); }
+}
+
+.card, .textbox { &:hover { box-shadow: 0 2px 10px var(--card-shadow); } }
+
+/* white-background figures and logos get a light frame in the dark theme */
+[data-theme="dark"] .page__content img:not(.highlight__thumb):not(.cv-entry__logo):not(.author__avatar):not(.area__thumb) {
+  background: #ffffff;
+  padding: 8px;
+  border-radius: 6px;
+}
+[data-theme="dark"] .cv-entry__logo {
+  box-sizing: content-box;
+  background: #ffffff;
+  padding: 3px 6px;
+  border-radius: 4px;
+}
+
+/* ---------- links in running text: quiet, underlined, red on hover ------- */
+
+.page__content,
+.archive {
+  p a:not(.action):not(.chip),
+  li a:not(.action):not(.chip),
+  dd a {
+    color: var(--text);
+    text-decoration: underline;
+    text-decoration-color: var(--accent-soft);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+
+    &:hover {
+      color: var(--accent);
+      text-decoration-color: var(--accent);
+    }
+  }
+}
+
+/* ---------- section headings ------------------------------------------- */
+
+.page__content h2,
+.archive h2 {
+  margin-top: 2.2em;
+  padding-bottom: 0.35em;
+  border-bottom: 2px solid var(--rule);
+  font-size: 1.35em;
+}
+
+.page__content h2:first-child,
+.archive h1 + h2 {
+  margin-top: 1em;
+}
+
+.page__content h3,
+.archive h3 {
+  margin-top: 1.8em;
+  font-size: 1.1em;
+}
+
+.section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5em;
+
+  > span { flex: 1; }
+}
+
+.section-toggle {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  margin: 0;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+
+  svg {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+    transition: transform 0.35s ease;
+  }
+
+  &:hover {
+    background: var(--card-bg-hover);
+    border-color: var(--card-border);
+    color: var(--accent);
+  }
+
+  &[aria-expanded="false"] svg { transform: rotate(180deg); }
+}
+
+.section-body {
+  overflow: hidden;
+  transition: max-height 0.45s ease;
+}
+
+/* the first thing inside a section sits right under its heading */
+.page__content .section-body > :first-child,
+.archive .section-body > :first-child { margin-top: 0.25em; }
+
+/* ---------- prose helpers ---------------------------------------------- */
+
+.prose {
+  text-align: left;
+
+  p { margin-bottom: 1em; }
+  strong { color: var(--text); font-weight: 600; }
+}
+
+.muted   { color: var(--muted); }
+.muted-2 { color: var(--muted-2); }
+
+.k-coauthor    { color: var(--muted);       font-weight: 600; }
+.k-preprint    { color: var(--preprint);    font-weight: 600; }
+.k-journal     { color: var(--accent);      font-weight: 600; }
+.k-invited     { color: var(--invited);     font-weight: 600; }
+.k-contributed { color: var(--contributed); font-weight: 600; }
+.k-school      { color: var(--school);      font-weight: 600; }
+.k-visit       { color: var(--visit);       font-weight: 600; }
+
+/* ---------- cards (the hover box used by every list item) --------------- */
+
+.card,
+.textbox {
+  position: relative;
+  margin: 0 0 1.1em;
+  padding: 16px 18px 14px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  color: var(--text);
+  transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    background: var(--card-bg-hover);
+    border-color: var(--card-border-hover);
+    box-shadow: 0 2px 10px var(--card-shadow);
+  }
+
+  .archive__item { margin: 0; }
+}
+
+.card--journal     { border-left: 3px solid var(--accent); }
+.card--preprint    { border-left: 3px solid var(--preprint); }
+.card--invited     { border-left: 3px solid var(--invited); }
+.card--contributed { border-left: 3px solid var(--contributed); }
+
+/* title colour follows the item type (preprints blue, contributed talks blue) */
+.card--preprint    .card__title a { color: var(--preprint); }
+.card--invited     .card__title a { color: var(--invited); }
+.card--contributed .card__title a { color: var(--contributed); }
+
+.card__title {
+  margin: 0 0 0.35em !important;
+  padding: 0;
+  border: 0;
+  font-size: 1.15em;
+  line-height: 1.35;
+
+  a {
+    color: var(--accent);
+    text-decoration: none;
+
+    &:hover { text-decoration: underline; }
+  }
+}
+
+.card__meta {
+  margin: 0 0 0.35em;
+  font-size: 0.8em;
+  color: var(--muted);
+  text-align: left;
+
+  .sep { margin: 0 0.4em; color: var(--muted-2); }
+  i    { font-style: italic; }
+}
+
+.card__authors {
+  margin: 0 0 0.2em;
+  font-size: 0.85em;
+  color: var(--muted);
+  line-height: 1.5;
+
+  .me { color: var(--text); font-weight: 600; }
+}
+
+.card__text {
+  margin: 0.4em 0 0;
+  font-size: 0.95em;
+
+  p:last-child { margin-bottom: 0; }
+}
+
+.card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4em;
+  margin-top: 0.7em;
+}
+
+.action {
+  display: inline-block;
+  padding: 2px 9px;
+  border: 1px solid var(--card-border-hover);
+  border-radius: 4px;
+  font-size: 0.7em;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-decoration: none !important;
+  transition: color 0.15s ease, border-color 0.15s ease;
+
+  i { margin-left: 0.3em; font-size: 0.85em; }
+
+  &:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+}
+
+.chip {
+  display: inline-block;
+  vertical-align: middle;
+  padding: 1px 7px;
+  border-radius: 3px;
+  font-size: 0.7em;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1.6;
+  color: #fff;
+  background: var(--muted);
+}
+
+.chip--journal     { background: var(--accent-fill); }
+.chip--preprint    { background: var(--preprint-fill); }
+.chip--invited     { background: var(--invited-fill); }
+.chip--contributed { background: var(--contributed-fill); }
+
+/* dark theme: tinted chips in the same tone as the title and the border */
+[data-theme="dark"] .chip--journal,
+[data-theme="dark"] .chip--invited     { background: var(--accent-tint);   color: var(--accent); }
+[data-theme="dark"] .chip--preprint,
+[data-theme="dark"] .chip--contributed { background: var(--preprint-tint); color: var(--preprint); }
+
+/* ---------- research highlights ---------------------------------------- */
+
+.highlight {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.highlight__thumb {
+  flex: 0 0 116px;
+  width: 116px;
+  height: 116px;
+  padding: 4px;
+  border: 1px solid var(--card-border);
+  border-radius: 6px;
+  background: var(--thumb-bg);
+  object-fit: contain;
+}
+
+/* journal covers are portrait: let the box follow the image instead of
+   letterboxing it inside the square */
+.highlight__thumb--portrait { height: 146px; }
+
+.highlight__body { flex: 1; min-width: 0; }
+
+.highlight__title {
+  margin: 0 0 0.3em !important;
+  padding: 0;
+  border: 0;
+  font-size: 1.05em;
+  line-height: 1.35;
+
+  a {
+    color: var(--text);
+    text-decoration: none;
+    &:hover { color: var(--accent); text-decoration: underline; }
+  }
+}
+
+/* the research area is shown as a border, not as tinted text: a small
+   saturated mark reads at any lightness, coloured text does not */
+.highlight[data-theme] { border-left: 3px solid var(--area, var(--card-border)); }
+[data-theme="dark"] .highlight[data-theme] { border-left-color: var(--area-dark, var(--area)); }
+
+.highlight__meta {
+  margin: 0 0 0.35em;
+  font-size: 0.82em;
+  color: var(--muted);
+}
+
+.highlight__question {
+  margin: 0;
+  font-size: 0.9em;
+  font-style: italic;
+  color: var(--text);
+}
+
+@media (max-width: 600px) {
+  .highlight { align-items: flex-start; gap: 12px; }
+  .highlight__thumb { flex-basis: 84px; width: 84px; height: 84px; }
+  .highlight__thumb--portrait { height: 106px; }
+}
+
+/* ---------- research overview (timeline + compact area cards) ------------ */
+
+.overview__lead {
+  margin: 0.4em 0 0.8em;
+}
+
+.timeline-block { margin: 0.6em 0 1.6em; }
+
+.embed--timeline {
+  aspect-ratio: 8 / 1;
+  min-height: 96px;
+  max-height: 130px;
+  margin: 0 0 0.5em;
+}
+
+.area-key {
+  display: grid;
+  grid-template-columns: repeat(2, max-content);
+  gap: 0.45em 2em;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (max-width: 780px) { .area-key { grid-template-columns: max-content; } }
+
+.area-key__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  margin: 0;
+  font-size: 0.88em;
+  --dot: var(--area, var(--muted-2));
+}
+[data-theme="dark"] .area-key__item { --dot: var(--area-dark, var(--area, var(--muted-2))); }
+.area-key__item--other {
+  --dot: var(--muted-2);
+  .area-key__title { color: var(--muted); font-weight: 600; }
+}
+
+.area-key__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--dot);
+}
+
+.page__content li a.area-key__title:not(.action):not(.chip),
+.archive li a.area-key__title:not(.action):not(.chip),
+.area-key__title {
+  color: var(--text);
+  font-weight: 600;
+  text-decoration: none;
+  &:hover { color: var(--accent); text-decoration: underline; }
+}
+
+.page__content li a.area-key__count:not(.action):not(.chip),
+.archive li a.area-key__count:not(.action):not(.chip),
+.area-key__count {
+  padding: 0 7px;
+  border-radius: 999px;
+  background: var(--bg-elev);
+  border: 1px solid var(--card-border);
+  font-size: 0.78em;
+  color: var(--muted);
+  text-decoration: none;
+  &:hover { color: var(--accent); border-color: var(--accent); }
+}
+
+/* phones: a taller frame so the beeswarm has room, legend in one column */
+@media (max-width: 600px) {
+  .timeline-block { margin: 0.1em 0 1.2em; }
+  .embed--timeline { aspect-ratio: 5 / 4; min-height: 190px; max-height: 240px; margin: 0 0 0.6em; }
+  .area-key { gap: 0.4em; }
+  .area-key__item { font-size: 0.92em; }
+}
+
+.areas {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 0.5em;
+}
+
+.area__banner {
+  display: block;
+  margin: -10px -13px 10px;
+  border-bottom: 1px solid var(--card-border);
+  border-radius: 6px 6px 0 0;
+  background: var(--bg-elev);
+  overflow: hidden;
+}
+
+.area__thumb {
+  display: block;
+  width: 100%;
+  aspect-ratio: 2 / 1;
+  object-fit: cover;
+}
+.area__thumb--dark { display: none; }
+[data-theme="dark"] .area__thumb--light { display: none; }
+[data-theme="dark"] .area__thumb--dark  { display: block; }
+
+.area {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 10px 13px 10px;
+  border-top: 3px solid var(--area, var(--accent));
+}
+[data-theme="dark"] .area { border-top-color: var(--area-dark, var(--area)); }
+
+.page__content .area__title,
+.archive .area__title {
+  margin: 0 0 0.25em;
+  padding: 0;
+  border: 0;
+  font-size: 0.95em;
+  line-height: 1.3;
+  a { color: var(--text); text-decoration: none; &:hover { color: var(--accent); text-decoration: underline; } }
+}
+
+.area__question {
+  flex: 1;
+  margin: 0 0 0.7em;
+  font-size: 0.82em;
+  line-height: 1.45;
+  color: var(--muted);
+}
+
+.area__foot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35em;
+  margin: 0;
+  .action { font-size: 0.66em; padding: 1px 8px; }
+}
+
+/* a slightly wider container than the theme default, so the three cards fit
+   their titles on one line and the section rules still span the same width.
+   Only the max-width changes: $x-large is also a breakpoint and moving it
+   collapses the layout on 1280-wide screens. */
+@media (min-width: 1280px) {
+  .masthead__inner-wrap,
+  #main { max-width: 1380px; }
+}
+
+@media (max-width: 900px) { .areas { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* phones: the strip goes, and the cards become a swipeable row so the
+   drawings survive without eating the screen */
+@media (max-width: 600px) {
+  .overview__lead { margin-bottom: 0.5em; }
+
+  .areas {
+    display: flex;
+    grid-template-columns: none;
+    gap: 10px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    margin: 0 -1em 0.6em;
+    padding: 0 1em 4px;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar { display: none; }
+  }
+
+  .area {
+    /* wide enough for the longest title to stay on one line, while the next
+       card still peeks in to show the row can be swiped */
+    flex: 0 0 84%;
+    max-width: 310px;
+    scroll-snap-align: start;
+    flex-direction: column;
+    padding: 0 0 9px;
+  }
+
+  .area__banner { display: block; margin: 0 0 8px; border-radius: 5px 5px 0 0; }
+  .page__content .area__title,
+  .archive .area__title { margin: 0 12px 0.55em; font-size: 0.9em; }
+  .area__question { display: none; }
+  .page__content .area__foot,
+  .archive .area__foot { margin: 0 12px; }
+}
+
+/* ---------- publication filters ---------------------------------------- */
+
+.pub-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4em;
+  margin: 1.5em 0 0.5em;
+}
+
+.pub-filter {
+  --pill: var(--area, var(--accent));
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  padding: 4px 12px;
+  border: 1px solid var(--card-border-hover);
+  border-radius: 999px;
+  background: var(--card-bg);
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.82em;
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+
+  .count {
+    padding: 0 6px;
+    border-radius: 999px;
+    background: var(--bg-elev);
+    font-size: 0.85em;
+    color: var(--muted-2);
+  }
+
+  &:hover { color: var(--accent); border-color: var(--accent); }
+
+  /* the selected area shows in its own colour; "All" keeps the site accent.
+     A tint rather than a solid fill, so the label stays readable whatever
+     the hue: white on the amber would not be. */
+  &.is-active {
+    color: #fff;
+    background: var(--accent-fill);
+    border-color: var(--accent-fill);
+    .count { background: rgba(255, 255, 255, 0.18); color: #fff; }
+  }
+
+  &.is-active[data-theme]:not([data-theme="all"]) {
+    color: var(--pill);
+    border-color: var(--pill);
+    background: var(--bg-elev);
+    background: color-mix(in srgb, var(--pill) 16%, transparent);
+
+    .count { background: color-mix(in srgb, var(--pill) 22%, transparent); color: var(--pill); }
+  }
+}
+
+[data-theme="dark"] .pub-filter { --pill: var(--area-dark, var(--area, var(--accent))); }
+
+.year-group[hidden] { display: none; }
+.pub-list .card[hidden] { display: none; }
+
+/* ---------- news & media ----------------------------------------------- */
+
+.news__title {
+  margin: 0 0 0.3em !important;
+  padding: 0;
+  border: 0;
+  font-size: 1em;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.news__list {
+  margin: 0;
+  padding-left: 1.1em;
+  font-size: 0.88em;
+  color: var(--muted);
+
+  li { margin-bottom: 0.15em; }
+}
+
+/* ---------- embedded widgets (network, map) ----------------------------- */
+
+.embed {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 0;
+  border-radius: 8px;
+  margin: 0.5em 0 1.5em;
+}
+
+.embed--network      { aspect-ratio: 16 / 10; min-height: 320px; }
+.embed--map          { aspect-ratio: 5 / 2;   min-height: 240px; }
+
+@media (max-width: 600px) {
+  .embed--network      { aspect-ratio: 4 / 5; }
+  .embed--map          { aspect-ratio: 4 / 3; }
+}
+
+
+/* ---------- curriculum ------------------------------------------------- */
+
+.cv-list {
+  margin: 0.5em 0 1em;
+}
+
+.cv-entry {
+  display: flex;
+  gap: 22px;
+  margin-bottom: 1.5em;
+}
+
+.cv-entry__when {
+  flex: 0 0 160px;
+  text-align: right;
+  font-size: 0.95em;
+  color: var(--muted);
+}
+
+.cv-entry__logo {
+  display: block;
+  height: 34px;
+  width: auto;
+  max-width: 150px;
+  margin: 8px 0 0 auto;
+  object-fit: contain;
+}
+
+.cv-entry__what {
+  flex: 1;
+  line-height: 1.55;
+
+  .role { font-weight: 600; color: var(--text); }
+  .at   { color: var(--muted); }
+}
+
+@media (max-width: 600px) {
+  .cv-entry { flex-direction: column; gap: 6px; }
+  .cv-entry__when { flex-basis: auto; text-align: left; }
+  .cv-entry__logo { margin: 6px 0 0; }
+}
+
+.cv-pubs,
+.cv-talks,
+.cv-teaching,
+.cv-schools {
+  padding-left: 1.2em;
+
+  li { margin-bottom: 0.7em; line-height: 1.5; }
+
+  .cv-item__title {
+    font-weight: 600;
+    color: var(--accent);
+    text-decoration: none;
+    &:hover { text-decoration: underline; }
+  }
+
+  .cv-item__sub { color: var(--muted); font-size: 0.95em; }
+}
+
+/* ---------- blog listing ----------------------------------------------- */
+
+.post-meta {
+  margin: 0 0 0.6em;
+  font-size: 0.8em;
+  color: var(--muted);
+
+  .sep { margin: 0 0.4em; color: var(--muted-2); }
+}
+
+/* ---------- sidebar: drop the "Follow" button, show links inline on small
+   screens instead of behind a popover -------------------------------------- */
+
+.author__urls-wrapper > button { display: none; }
+
+@media (max-width: 1023px) {
+  .sidebar [itemscope] {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    column-gap: 14px;
+  }
+  .author__avatar {
+    display: block;
+    flex: 0 0 60px;
+    width: 60px;
+    img { max-width: 60px; }
+  }
+  .author__content {
+    display: block;
+    flex: 1;
+    padding: 0;
+    line-height: 1.3;
+  }
+  .sidebar .author__name { margin: 0; }
+  .author__bio { margin: 2px 0 0; }
+  .author__location { display: block; }
+  .author__urls-wrapper {
+    display: block;
+    flex-basis: 100%;
+    margin-top: 12px;
+    cursor: default;
+  }
+
+  /* icons only: with labels this list runs to five rows on a phone */
+  .author__urls {
+    display: flex !important;
+    flex-wrap: wrap;
+    gap: 2px;
+    position: static;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+    z-index: auto;
+
+    &:before, &:after { display: none; }
+
+    .label { display: none; }
+
+    li {
+      display: block;
+      margin: 0;
+    }
+    /* the location is shown under the name instead */
+    li.author__urls-location { display: none; }
+
+    li > a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 32px;
+      font-size: 1.2em;
+      border-radius: 6px;
+      color: var(--muted);
+
+      &:hover { color: var(--accent); background: var(--card-bg-hover); }
+    }
+
+    li i { width: auto; margin: 0; }
+    li .wos-icon-wrap { width: 15px; margin: 0; }
+  }
+
+  /* the theme switch keeps its label, it is a setting rather than a link */
+  .theme-toggle-item .theme-toggle--inline {
+    width: auto;
+    height: 32px;
+    padding: 0 10px;
+    .label, .theme-toggle__label { display: inline; }
+  }
+}
+
+/* ---------- misc ------------------------------------------------------- */
+
+.page__content .archive__item-title { margin-top: 0; }
+
+.download-line { color: var(--muted); }

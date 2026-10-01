@@ -1,0 +1,14 @@
+{% comment %} Research highlight cards, data in _data/highlights.yml {% endcomment %}
+<div class="highlights">
+{% for h in site.data.highlights %}
+  {% assign t = site.data.themes | where: "key", h.theme | first %}
+  <div class="card highlight"{% if t %} data-theme="{{ t.key }}" style="--area: {{ t.colour }}; --area-dark: {{ t.colour_dark | default: t.colour }}"{% endif %}>
+    {% if h.image %}<img class="highlight__thumb{% if h.image_portrait %} highlight__thumb--portrait{% endif %}" src="{{ h.image }}" alt="">{% endif %}
+    <div class="highlight__body">
+      <h3 class="highlight__title"><a href="{{ h.url }}" target="_blank" rel="noopener">{{ h.title }}</a></h3>
+      <p class="highlight__meta">{{ h.meta }}{% for n in h.notes %}, <a href="{{ n.url }}" target="_blank" rel="noopener">{{ n.label }}</a>{% endfor %}</p>
+      <p class="highlight__question">{{ h.question }}</p>
+    </div>
+  </div>
+{% endfor %}
+</div>

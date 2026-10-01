@@ -1,0 +1,36 @@
+{% include base_path %}
+
+{% if post.id %}
+  {% assign title = post.title | markdownify | remove: "<p>" | remove: "</p>" %}
+{% else %}
+  {% assign title = post.title %}
+{% endif %}
+
+{% assign ttype = post.type | downcase %}
+{% if ttype contains "invited" %}
+  {% assign kind = "invited" %}
+{% elsif ttype contains "contributed" %}
+  {% assign kind = "contributed" %}
+{% else %}
+  {% assign kind = "seminar" %}
+{% endif %}
+
+<div class="card card--{{ kind }}">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    <h2 class="card__title" itemprop="headline">
+      {% if post.link %}
+        <a href="{{ post.link }}">{{ title }}</a>
+      {% else %}
+        <a href="{{ base_path }}{{ post.url }}" rel="permalink">{{ title }}</a>
+      {% endif %}
+    </h2>
+
+    <p class="card__meta">
+      <span class="chip chip--{{ kind }}">{{ post.type }}</span>
+      {% if post.date %}<span class="sep">·</span>{{ post.date | date: '%B %d, %Y' }}{% endif %}
+      {% if post.venue %}<span class="sep">·</span>{{ post.venue }}{% if post.location %}, {{ post.location }}{% endif %}{% endif %}
+    </p>
+
+    {% if post.excerpt %}<div class="card__text" itemprop="description">{{ post.excerpt | markdownify }}</div>{% endif %}
+  </article>
+</div>

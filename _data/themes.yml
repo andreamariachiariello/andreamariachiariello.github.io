@@ -1,0 +1,23 @@
+- key: genome
+  title: "3D genome organization"
+  question: "How do physical interactions shape the folding of chromosomes?"
+  topics: "Polymer physics, chromatin architecture, gene regulation"
+  anchor: "/research/#genome-head"
+  colour: "#c9922c"
+  colour_dark: "#d9a441"
+
+- key: disease
+  title: "Chromatin in health and disease"
+  question: "How do genetic alterations and viral infections reorganize the genome?"
+  topics: "Structural variation, viral infection, chromatin dynamics"
+  anchor: "/research/#disease-head"
+  colour: "#1f3f7a"
+  colour_dark: "#6f92d0"
+
+- key: epidemics
+  title: "Epidemic modelling"
+  question: "How can simple computational rules describe epidemic waves?"
+  topics: "Complex systems, cellular automata, epidemic dynamics"
+  anchor: "/research/#epidemics-head"
+  colour: "#3f8a5c"
+  colour_dark: "#5aa877"

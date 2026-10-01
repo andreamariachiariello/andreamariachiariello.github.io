@@ -1,0 +1,22 @@
+{% include base_path %}
+
+{% if post.id %}
+  {% assign title = post.title | markdownify | remove: "<p>" | remove: "</p>" %}
+{% else %}
+  {% assign title = post.title %}
+{% endif %}
+
+{% if post.paperurl and post.paperurl != "" %}
+  {% assign url = post.paperurl %}
+{% else %}
+  {% assign url = post.preprinturl %}
+{% endif %}
+
+<li>
+  <a class="cv-item__title" href="{{ url }}" target="_blank" rel="noopener">{{ title }}</a><br>
+  <span class="cv-item__sub">
+    {% assign authors = post.authors | split: ', ' %}
+    {% for author in authors %}{% if author contains site.author.name %}<span class="me">{{ author }}</span>{% else %}{{ author }}{% endif %}{% unless forloop.last %}, {% endunless %}{% endfor %}.
+    <i>{{ post.venue }}</i>.
+  </span>
+</li>
