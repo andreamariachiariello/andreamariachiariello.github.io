@@ -2,7 +2,7 @@ _site/
 .sass-cache/
 .jekyll-cache/
 .bundle/
-vendor/
+/vendor/
 .venv/
 __pycache__/
 .DS_Store
