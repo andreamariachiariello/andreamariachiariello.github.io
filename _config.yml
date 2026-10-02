@@ -3,9 +3,9 @@ title: Andrea Maria Chiariello
 title_separator: ' &#124; '
 name: Andrea Maria Chiariello
 description: Theoretical physics, genome organization and computational biology
-url: https://USERNAME.github.io
-baseurl: ''
-repository: USERNAME/USERNAME.github.io
+url: "https://andreamariachiariello.github.io"
+baseurl: ""
+repository: "andreamariachiariello/andreamariachiariello.github.io"
 teaser: null
 breadcrumbs: false
 words_per_minute: 160
